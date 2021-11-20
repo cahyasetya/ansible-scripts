@@ -1,0 +1,27 @@
+---
+- name: Check if zsh exists
+  stat:
+    path: ~/.oh-my-zsh
+  register: stat_result
+
+- name: Download zsh installer
+  get_url:
+    url: https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh
+    dest: "{{ playbook_dir }}"
+    mode: 0775
+  when: not stat_result.stat.exists
+
+- name: Execute the zsh-installer.sh
+  shell: "{{ playbook_dir }}/install.sh"
+  when: not stat_result.stat.exists
+
+- name: Check downloaded file existence
+  stat:
+    path: "{{ playbook_dir }}/install.sh"
+  register: downloaded_file
+
+- name: Remove the zsh-installer.sh
+  file:
+    path: "{{ playbook_dir }}/install.sh"
+    state: absent
+  when: downloaded_file.stat.exists

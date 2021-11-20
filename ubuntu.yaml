@@ -1,0 +1,17 @@
+---
+- name: Setup ubuntu
+  hosts: localhost
+  tasks:
+    - name: Install vim
+      apt:
+        name: vim
+    - name: Install git
+      become: yes
+      apt:
+        name: git
+    - name: Visual studio code
+      import_tasks: visual-studio-code.yaml
+    - name: Chrome
+      import_tasks: chrome.yaml
+    - name: Oh-my-zsh
+      import_tasks: oh-my-zsh.yaml
