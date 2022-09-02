@@ -1,0 +1,35 @@
+---
+- name: install cloudflared
+  ansible.builtin.apt:
+    deb: https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+
+- name: create cloudflared user
+  ansible.builtin.user:
+    name: cloudflared
+    group: cloudflared
+    comment: cloudlfared
+    create_home: no
+    shell: /sbin/nologin
+
+- name: create configuration file
+  ansible.builtin.template:
+    src: configs/cloudflared
+    dest: /etc/default/cloudflared
+    owner: cloudflared
+    group: cloudflared
+
+- name: create systemd script
+  ansible.builtin.template:
+    src: systemd/cloudflared.service
+    dest: /etc/systemd/system/cloudflared.service
+
+- name: enable cloudflared
+  ansible.builtin.systemd:
+    name: cloudflared.service
+    enabled: yes
+    masked: no
+
+- name: start cloudflared
+  ansible.builtin.systemd:
+    name: cloudflared.service
+    state: started
