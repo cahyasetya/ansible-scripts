@@ -1,0 +1,16 @@
+---
+- name: Add ppa
+  become: yes
+  apt_repository:
+    repo: ppa:rael-gc/rvm
+- name: install rvm
+  become: yes
+  apt:
+    name: rvm
+    update_cache: yes
+- name: add user to group
+  become: yes
+  user:
+    name: "{{ my_user }}"
+    groups: "{{ my_groups }}"
+    append: true
