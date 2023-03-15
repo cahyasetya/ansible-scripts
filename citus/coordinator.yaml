@@ -1,0 +1,21 @@
+---
+- name: Setup Coordinator
+  hosts: coordinator
+  tasks:
+    - name: basic setup
+      import_tasks: node.yaml
+    - name: set coordinator
+      postgresql_query:
+        db: postgres
+        login_user: postgres
+        query: "SELECT citus_set_coordinator_host('192.168.33.10', 5432);"
+    - name: set worker1
+      postgresql_query:
+        db: postgres
+        login_user: postgres
+        query: "SELECT * from citus_add_node('192.168.33.11', 5432);"
+    - name: set worker2
+      postgresql_query:
+        db: postgres
+        login_user: postgres
+        query: "SELECT * from citus_add_node('192.168.33.12', 5432);"
