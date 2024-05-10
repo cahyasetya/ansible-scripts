@@ -1,9 +1,0 @@
----
-- name: Check if package installed
-  command: dpkg -l google-chrome-stable
-  register: chrome_check
-- name: Install google chrome
-  become: yes
-  apt:
-    deb: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  when: chrome_check.stdout.find('no packages found') != -1

@@ -1,6 +1,0 @@
----
-- name: Setup Worker
-  hosts: workers
-  tasks:
-    - name: basic setup
-      import_tasks: node.yaml

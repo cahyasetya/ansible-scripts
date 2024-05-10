@@ -1,0 +1,33 @@
+---
+- name: Setup ubuntu
+  hosts: localhost
+  roles:
+    - {
+        name: staticdev.pyenv,
+        pyenv_env: "system",
+        pyenv_global: ["3.8.16"],
+        pyenv_python_versions: ["3.8.16"],
+        pyenv_uninstall_python_w_wrong_configure_opts: False
+      }
+  vars:
+    homebrew:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+  tasks:
+    - name: Install vim
+      apt:
+        pkg:
+          - vim
+          - software-properties-common
+          - build-essential
+          - procps
+          - curl
+          - file
+          - git
+    - name: Install brew
+      shell: |
+        test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+        test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+    - name: Install zsh
+      import_tasks: zsh.yaml
+      environment: "{{ homebrew }}"
